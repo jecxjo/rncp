@@ -11,23 +11,21 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
-require 'rncp/version'
-
-require 'clamp'
-
-require 'rncp/listen_cmd'
+require 'socket'
+require 'rncp/params'
 
 module RNCP
-  def self.version_string
-    "RNCP version #{RNCP::VERSION}"
-  end
+  module Networking
+    def bind_tcp
+      sock = Socket::new Socket::AF_INET, Socket::SOCK_STREAM, 0
+      opts = [1].pack("i")
+      addr = [Socket::AF_INET, RNCP::PORT, 0, 0, 0, 0, 0, 0]
+        .pack("snCCCCNN")
 
-  module Cli
-    class CommandLineRunner < Clamp::Command
-      self.default_subcommand = "listen"
-
-      subcommand 'listen', "runs in listener mode, waits for connection", ListenCommand
+      sock.setsockopt Socket::SOL_SOCKET, Socket::SO_REUSEADDR, opts
+      sock.bind addr
+      sock.listen 1
+      return sock
     end
-  end # Cli
+  end
 end
-

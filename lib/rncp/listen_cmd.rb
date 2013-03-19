@@ -11,23 +11,16 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
-require 'rncp/version'
-
-require 'clamp'
-
-require 'rncp/listen_cmd'
+require 'rncp/listener'
 
 module RNCP
-  def self.version_string
-    "RNCP version #{RNCP::VERSION}"
-  end
-
   module Cli
-    class CommandLineRunner < Clamp::Command
-      self.default_subcommand = "listen"
+    class ListenCommand < Clamp::Command
 
-      subcommand 'listen', "runs in listener mode, waits for connection", ListenCommand
-    end
+      def execute
+        RNCP::NcpListener.new.listen
+      end
+
+    end # ListenCommand
   end # Cli
-end
-
+end # RNCP

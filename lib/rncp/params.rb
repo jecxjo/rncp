@@ -11,23 +11,9 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
-require 'rncp/version'
-
-require 'clamp'
-
-require 'rncp/listen_cmd'
 
 module RNCP
-  def self.version_string
-    "RNCP version #{RNCP::VERSION}"
-  end
-
-  module Cli
-    class CommandLineRunner < Clamp::Command
-      self.default_subcommand = "listen"
-
-      subcommand 'listen', "runs in listener mode, waits for connection", ListenCommand
-    end
-  end # Cli
+  IPV4_GROUP = '224.110.99.112'
+  IPV4_BC = '255.255.255.255'
+  PORT = 8002
 end
-
