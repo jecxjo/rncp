@@ -11,12 +11,17 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
-require 'rncp/version'
+require 'rncp/listener'
 
 module RNCP
-  IPV4_GROUP = '224.110.99.112'
-  IPV4_BC = '255.255.255.255'
-  PORT = 8002
-  MC_MSG = "Multicasting for rncp Version #{RNCP::VERSION}"
-  BC_MSG = "Broadcasting for rncp Version #{RNCP::VERSION}"
-end
+  module Cli
+    class PollCommand < Clamp::Command
+
+      def execute
+        RNCP::NcpListener.new.poll
+      end
+
+    end # PollCommand
+  end # Cli
+end # RNCP
+

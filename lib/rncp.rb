@@ -17,6 +17,8 @@ require 'clamp'
 
 require 'rncp/listen_cmd'
 require 'rncp/send_cmd'
+require 'rncp/poll_cmd'
+require 'rncp/push_cmd'
 
 module RNCP
   def self.version_string
@@ -29,6 +31,8 @@ module RNCP
 
       subcommand 'listen', "runs in listener mode, waits for connection", ListenCommand
       subcommand 'send', "sends files to a listener mode receiver", SendCommand
+      subcommand 'push', "broadcasts for clients, waits for connection", PushCommand
+      subcommand 'poll', "waits for broadcast, connects to broadcaster", PollCommand
     end
   end # Cli
 end

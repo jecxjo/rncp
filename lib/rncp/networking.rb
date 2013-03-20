@@ -12,6 +12,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 require 'socket'
+require 'ipaddr'
 require 'rncp/params'
 
 module RNCP
@@ -26,6 +27,28 @@ module RNCP
       sock.bind addr
       sock.listen 1
       return sock
-    end
-  end
-end
+    end # bind_tcp
+
+    def join_multicast
+      msock = UDPSocket.new
+      membership = IPAddr.new(RNCP::IPV4_GROUP).hton +
+                   IPAddr.new("0.0.0.0").hton
+
+      puts "[#] Joining Multicast group"
+      msock.setsockopt :IPPROTO_IP, :IP_ADD_MEMBERSHIP, membership
+      msock.setsockopt :SOL_SOCKET, :SO_REUSEADDR, 1 
+      msock.bind "0.0.0.0", RNCP::PORT
+
+      return msock
+    end # join_multicast
+
+    def bind_multicast
+      msock = UDPSocket.open
+      msock.setsockopt :IPPROTO_IP, :IP_MULTICAST_TTL, [32].pack("i")
+      msock.setsockopt :SOL_SOCKET, :SO_REUSEADDR, 1 
+      msock.bind '', RNCP::PORT
+      msock.setsockopt :IPPROTO_IP, :IP_MULTICAST_LOOP, 1
+      return msock
+    end # bind_multicast
+  end # Networking
+end # RNCP

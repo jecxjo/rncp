@@ -52,7 +52,50 @@ module RNCP
       puts "[#] finished"
       sock.close
       l.close
+    end # listen
 
-    end
-  end
-end
+    def poll
+      addr = nil
+      msock = join_multicast
+      puts "[*] waiting for something-cast"
+      loop do
+        begin
+          data, addr = msock.recvfrom 1024
+          if addr[1] == RNCP::PORT
+            puts "[*] found pusher at #{addr[3]}:#{addr[1]}"
+            puts "[#] Anouncement: #{data}"
+            break
+          else
+            puts "[?] received garbase from #{addr}"
+          end
+        rescue Execeptione => e
+          puts "exception #{e}"
+        end # begin
+      end #loop
+
+      msock.close if msock.nil? == false
+
+      sock = TCPSocket::new addr[3], addr[1]
+      sock.send "I am ready!", 0
+
+      data = ""
+      while (sock.eof? == false)
+        data += sock.gets()
+      end
+
+      sgz = Zlib::GzipReader.new(StringIO.new(data))
+      tar = Archive::Tar::Minitar::Input.new sgz
+
+      tar.each do |entry|
+        puts "[*] #{entry.name}"
+        tar.extract_entry "./", entry
+      end
+
+      puts "[*] received: "
+
+      puts "[#] finished"
+      sock.close
+    end # poll
+
+  end # NcpListener
+end # RNCP
