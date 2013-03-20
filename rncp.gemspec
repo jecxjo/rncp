@@ -17,6 +17,4 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency "minitar", ">= 0.5.4"
   gem.add_runtime_dependency "clamp", '~> 0.3'
-  gem.add_development_dependency 'rspec', '~> 2.5'
-  gem.add_development_dependency "rake", '~> 0.9'
 end
