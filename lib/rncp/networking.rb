@@ -30,25 +30,48 @@ module RNCP
     end # bind_tcp
 
     def join_multicast
-      msock = UDPSocket.new
-      membership = IPAddr.new(RNCP::IPV4_GROUP).hton +
-                   IPAddr.new("0.0.0.0").hton
+      begin
+        msock = UDPSocket.new
+        membership = IPAddr.new(RNCP::IPV4_GROUP).hton +
+                     IPAddr.new("0.0.0.0").hton
 
-      puts "[#] Joining Multicast group"
-      msock.setsockopt :IPPROTO_IP, :IP_ADD_MEMBERSHIP, membership
-      msock.setsockopt :SOL_SOCKET, :SO_REUSEADDR, 1 
-      msock.bind "0.0.0.0", RNCP::PORT
+        puts "[#] Joining Multicast group"
+        msock.setsockopt :IPPROTO_IP, :IP_ADD_MEMBERSHIP, membership
+        msock.setsockopt :SOL_SOCKET, :SO_REUSEADDR, 1 
+        msock.bind "0.0.0.0", RNCP::PORT
 
-      return msock
+        return msock
+      rescue
+        puts "[!] Multicast not supported"
+        return nil
+      end
     end # join_multicast
 
     def bind_multicast
-      msock = UDPSocket.open
-      msock.setsockopt :IPPROTO_IP, :IP_MULTICAST_TTL, [32].pack("i")
-      msock.setsockopt :SOL_SOCKET, :SO_REUSEADDR, 1 
-      msock.bind '', RNCP::PORT
-      msock.setsockopt :IPPROTO_IP, :IP_MULTICAST_LOOP, 1
-      return msock
+      begin
+        msock = UDPSocket.open
+        msock.setsockopt :IPPROTO_IP, :IP_MULTICAST_TTL, [32].pack("i")
+        msock.setsockopt :SOL_SOCKET, :SO_REUSEADDR, 1 
+        msock.bind '', RNCP::PORT
+        msock.setsockopt :IPPROTO_IP, :IP_MULTICAST_LOOP, 1
+        return msock
+      rescue
+        puts "[!] Multicast not supported"
+        return nil
+      end
     end # bind_multicast
+
+    def bind_broadcast
+      begin
+        bsock = UDPSocket.open
+        bsock.setsockopt :SOL_SOCKET, :SO_BROADCAST, 1
+        bsock.setsockopt :SOL_SOCKET, :SO_REUSEADDR, 1
+        bsock.bind '', RNCP::PORT
+        return bsock
+      rescue
+        puts "[!] Broadcast not supported"
+        return nil
+      end
+    end # bind_broadcast
   end # Networking
 end # RNCP

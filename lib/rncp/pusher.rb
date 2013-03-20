@@ -53,8 +53,9 @@ module RNCP
         msock = bind_multicast
 
         # check broadcast
+        bsock = bind_broadcast
         
-        if msock.nil? == true
+        if msock.nil? == true && bsock.nil? == true
           puts "[!] cannot continue without atleast one announcement socket!"
           return 1
         end
@@ -68,10 +69,16 @@ module RNCP
 
         puts "[*] starting X-Casting, waiting for TCP connect"
         while sock.nil? == true
+          # Multicast Ping
           if msock.nil? == false
             msock.send RNCP::MC_MSG, 0, RNCP::IPV4_GROUP, RNCP::PORT
           end
-          # Broadcast
+
+          # Broadcast Ping
+          if bsock.nil? == false
+            bsock.send RNCP::BC_MSG, 0, RNCP::IPV4_BC, RNCP::PORT
+          end
+
           puts "."
           result = select( [dsock], nil, nil, 2 )
 
@@ -88,6 +95,8 @@ module RNCP
 
         msock.close if msock.nil? == false
         msock = nil
+        bsock.close if bsock.nil? == false
+        bsock = nil
         dsock.close if dsock.nil? == false
         dsock = nil
 
@@ -102,6 +111,7 @@ module RNCP
         sock.close if sock.nil? == false
         puts "[*] finished"
         msock.close if msock.nil? == false
+        bsock.close if bsock.nil? == false
         dsock.close if dsock.nil? == false
       end # begin
     end # push

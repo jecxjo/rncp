@@ -47,10 +47,19 @@ module RNCP
     def poll
       addr = nil
       msock = join_multicast
+      bsock = bind_broadcast
+      
+      if msock.nil? == true && bsock.nil? == true
+        puts "[!] cannot continue without atleast one announcement socket!"
+        return 1
+      end
+
+      xsock = msock.nil? == false ? msock : bsock
+
       puts "[*] waiting for something-cast"
       loop do
         begin
-          data, addr = msock.recvfrom 1024
+          data, addr = xsock.recvfrom 1024
           if addr[1] == RNCP::PORT
             puts "[*] found pusher at #{addr[3]}:#{addr[1]}"
             puts "[#] Anouncement: #{data}"
@@ -58,12 +67,13 @@ module RNCP
           else
             puts "[?] received garbase from #{addr}"
           end
-        rescue Execeptione => e
+        rescue Exception => e
           puts "exception #{e}"
         end # begin
       end #loop
 
       msock.close if msock.nil? == false
+      bsock.close if bsock.nil? == false
 
       sock = TCPSocket::new addr[3], addr[1]
       sock.send "I am ready!", 0
