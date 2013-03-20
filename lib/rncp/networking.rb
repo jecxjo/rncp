@@ -16,7 +16,11 @@ require 'ipaddr'
 require 'rncp/params'
 
 module RNCP
+  # Contains common networking operations shared between listeners and 
+  # pushers.
   module Networking
+    # Creates a TCP connection to listen for direct connections
+    # @return [Socket] listening socket
     def bind_tcp
       sock = Socket::new Socket::AF_INET, Socket::SOCK_STREAM, 0
       opts = [1].pack("i")
@@ -29,6 +33,10 @@ module RNCP
       return sock
     end # bind_tcp
 
+    # Creates a socket bound to the Multicast group. Returns nil if fails.
+    # This socket is used to listen for messages sent via Multicast. See
+    # {#bind_multicast} to send.
+    # @return [UDPSocket] multicast socket
     def join_multicast
       begin
         msock = UDPSocket.new
@@ -47,6 +55,9 @@ module RNCP
       end
     end # join_multicast
 
+    # Creates a socket that sends to Multicast group. Returns nil if fails.
+    # See {#join_multicast} to listen for Multicast.
+    # @return [UDPSocket] multicast socket
     def bind_multicast
       begin
         msock = UDPSocket.open
@@ -61,6 +72,9 @@ module RNCP
       end
     end # bind_multicast
 
+    # Creates a socket that sends and receives via Broadcast address.
+    # Returns nil if fails.
+    # @return [UDPSocket] broadcast socket
     def bind_broadcast
       begin
         bsock = UDPSocket.open

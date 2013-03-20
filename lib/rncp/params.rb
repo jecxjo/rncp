@@ -14,9 +14,18 @@
 require 'rncp/version'
 
 module RNCP
+  # IPv4 Multicast Group
   IPV4_GROUP = '224.110.99.112'
+
+  # IPv4 Broadcast Address
   IPV4_BC = '255.255.255.255'
+
+  # ncp Server Port
   PORT = 8002
+
+  # Message sent when connecting via multicast
   MC_MSG = "Multicasting for rncp Version #{RNCP::VERSION}"
+
+  # Message sentw hen connecting via broadcast
   BC_MSG = "Broadcasting for rncp Version #{RNCP::VERSION}"
 end

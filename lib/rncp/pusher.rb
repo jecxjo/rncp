@@ -19,6 +19,8 @@ require 'archive/tar/minitar'
 require 'tempfile'
 
 module RNCP
+  # Class to establish a connection to a Listener class and then compress
+  # and send files.
   class NcpPusher
     include RNCP::Networking
     include RNCP::Files
@@ -26,6 +28,9 @@ module RNCP
     def initialize
     end
 
+    # Sends file directly to a given IP Address or Hostname
+    # @param ip [String] the address or hostname of the destination
+    # @param files [Array] array of file/directory names to send
     def send_to(ip, files)
       begin
         puts "[*] copying #{files} to ip : #{ip}"
@@ -46,6 +51,9 @@ module RNCP
       end
     end # send_to
 
+    # Using Multicast or Broadcast, establishes a connection, compresses
+    # files and sends to destination.
+    # @param files [Array] array of file names to send
     def push(files)
       begin
         sock = nil

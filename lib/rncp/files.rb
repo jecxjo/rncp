@@ -16,7 +16,13 @@ require 'archive/tar/minitar'
 require 'stringio'
 
 module RNCP
+  # Module containing functions related to the file system and archive
+  # compression/decompression.
   module Files
+    # Recursively creates a list of all items (files/directories) found
+    # in the path.
+    # @param path [String] path to starting directory or file
+    # @return [Array] flatten array of all contents of directory, or file
     def directory_list(path)
       return [path].flatten if File.directory?(path) == false
 
@@ -28,6 +34,10 @@ module RNCP
       return data.flatten
     end # directory_list
 
+    # Creates a data string of a tar gzip file containing all files in
+    # list. See {#untar} for decompression.
+    # @param files [Arrray] list of files to add to archive
+    # return [StringIO] data bytes of tar gzip archive.
     def tar(files)
       data = StringIO.new("")
       sgz = Zlib::GzipWriter.new(data)
@@ -49,6 +59,9 @@ module RNCP
       return data
     end # tar
 
+    # Decompresses a data string of a tar gzip archive to current working
+    # directory. See {#tar} for compression.
+    # @param data [String] data bytes of tar gzip archive
     def untar(data)
       sgz = Zlib::GzipReader.new(StringIO.new(data))
       tar = Archive::Tar::Minitar::Input.new sgz

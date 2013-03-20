@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.8.5.2
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'><h1>rncp / Ruby Network Copy</h1>
+
+<p>This project is a port of Pyncp which is a port of the original 
+&quot;ncp - a fast file copy tool for LANs&quot; originally written by Felix von
+Leitner <a href="mailto:felix-ncp@fefe.de">felix-ncp@fefe.de</a></p>
+
+<p>At the moment rncp seems to be compatible with pyncp&#39;s default settings
+(i.e. Multicast for poll/push and gzip compression) but all options 
+will eventually be implemented via command line arguments. Also, all
+code should be pure ruby (minitar and Glib gems) so it should work with
+most if not all OS&#39;s.</p>
+
+<h2>Installation</h2>
+
+<p>Install ruby, then install the gem:</p>
+
+<pre class="code ruby"><code class="ruby">$ gem install rncp
+</code></pre>
+
+<p>Its a pure ruby gem, depending on pure ruby gems, so it should work with 
+most rubies.</p>
+
+<h2>Quick Start</h2>
+
+<p>If you want to send a file, directory or group of files/directories, start
+the listener on the destination machine:</p>
+
+<pre class="code ruby"><code class="ruby">$ rncp
+</code></pre>
+
+<p>To send a file or directory directly:</p>
+
+<pre class="code ruby"><code class="ruby">$ rncp send 192.168.1.2 file.txt ./directory
+</code></pre>
+
+<p>To send files and directories without knowing IP Addresses or Hostnames 
+setup a Multicast/Broadcast Poll on the destination machine:</p>
+
+<pre class="code ruby"><code class="ruby">$ rncp poll
+</code></pre>
+
+<p>To send via Multicast/Broadcast use a push:</p>
+
+<pre class="code ruby"><code class="ruby">$ rncp push file.txt ./directory
+</code></pre>
+
+<h2>Credits</h2>
+
+<p>Thanks to <a href="http://www.fefe.de/ncp/">Felix</a> and
+<a href="https://github.com/makefu/pyncp">makefu</a></p>
+</div></div>
+
+    <div id="footer">
+  Generated on Wed Mar 20 13:40:37 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.5.2 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>

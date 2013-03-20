@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.summary = "a fast file copy tool for LANs"
   gem.description = "A port of NCP written in Ruby"
   gem.homepage = "http://github.com/jecxjo/rncp"
-  gem.files = Dir['lib/**/*.rb']
+  gem.files = Dir['lib/**/*.rb', '.yardopts', 'README.md']
   gem.executables = Dir['bin/*'].each.map{ |f| File.basename(f) }
   gem.require_paths = ["lib"]
 

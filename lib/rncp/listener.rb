@@ -15,6 +15,8 @@ require 'rncp/networking'
 require 'rncp/files'
 
 module RNCP
+  # Class used to listen for direct and Multicast/Broadcast connections,
+  # which then triggers the receving of data from the Pusher class.
   class NcpListener
     include RNCP::Networking
     include RNCP::Files
@@ -22,6 +24,9 @@ module RNCP
     def initialize
     end
 
+    # Listens for a direct connection from a source. Will wait until
+    # a connection is made and then decompresses files to current
+    # working directory.
     def listen
       puts "[#] rncp Listener: creating new connection"
       l = bind_tcp
@@ -44,6 +49,9 @@ module RNCP
       l.close
     end # listen
 
+    # Waits for a Multicast or Broadcast message sent by a source and
+    # establishes a connection similar to {#listen} which then
+    # decompresses files to current working directory.
     def poll
       addr = nil
       msock = join_multicast

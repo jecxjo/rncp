@@ -1,0 +1,1 @@
+--exclude .*_cmd.rb --exclude rncp.rb --no-private --protected lib/**/*.rb - README.md
