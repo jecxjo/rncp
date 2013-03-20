@@ -22,12 +22,17 @@ require 'rncp/push_cmd'
 
 module RNCP
   def self.version_string
-    "RNCP version #{RNCP::VERSION}"
+    "rncp version #{RNCP::VERSION}"
   end
 
   module Cli
     class CommandLineRunner < Clamp::Command
       self.default_subcommand = "listen"
+
+      option ["--version", "-v"], :flag, "Show version" do
+        puts "rncp version #{RNCP::VERSION}"
+        exit(0)
+      end
 
       subcommand 'listen', "runs in listener mode, waits for connection", ListenCommand
       subcommand 'send', "sends files to a listener mode receiver", SendCommand

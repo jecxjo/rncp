@@ -8,10 +8,16 @@ Gem::Specification.new do |gem|
   gem.version = RNCP::VERSION
   gem.author = ["Jeff Parent"]
   gem.email = ["jecxjo@sdf.lonestar.org"]
+  gem.platform = Gem::Platform::RUBY
+
   gem.summary = "a fast file copy tool for LANs"
-  gem.description = "A port of NCP written in Ruby"
+  gem.description = <<EOF
+rncp provides a fast way of transfering files between systems.
+Its pure Ruby port of Pyncp/Ncp.
+EOF
+
   gem.homepage = "http://github.com/jecxjo/rncp"
-  gem.files = Dir['lib/**/*.rb', '.yardopts', 'README.md']
+  gem.files = Dir['lib/**/*.rb', '.yardopts', 'README.md', 'CHANGELOG']
   gem.executables = Dir['bin/*'].each.map{ |f| File.basename(f) }
   gem.require_paths = ["lib"]
 
