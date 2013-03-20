@@ -13,5 +13,5 @@
 # GNU General Public License for more details.
 
 module RNCP
-  VERSION = '0.0.0'
+  VERSION = '0.0.1'
 end
