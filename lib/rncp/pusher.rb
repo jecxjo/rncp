@@ -21,20 +21,9 @@ require 'tempfile'
 module RNCP
   class NcpPusher
     include RNCP::Networking
+    include RNCP::Files
 
     def initialize
-    end
-
-    def directory_list(path)
-      return [path].flatten if File.directory?(path) == false
-
-      data = []
-      Dir["#{path}**/*", "#{path}**/.*"].each do |entry|
-        next if entry[/^.*\/\.+$/]
-        data << directory_list(entry)
-      end
-
-      return data.flatten
     end
 
     def send_to(ip, files)
@@ -42,24 +31,9 @@ module RNCP
         puts "[*] copying #{files} to ip : #{ip}"
         sock = TCPSocket::new ip, RNCP::PORT
         sock.setsockopt Socket::IPPROTO_TCP, Socket::TCP_NODELAY, 1
+
+        data = tar files
         
-        data = StringIO.new("")
-        sgz = Zlib::GzipWriter.new(data)
-        tar = Archive::Tar::Minitar::Output.new sgz
-
-        puts "[#] start writing files"
-        files.each do |f|
-          directory_list(f).each do |entry|
-            puts "[*] adding: #{entry}"
-            Archive::Tar::Minitar.pack_file(entry, tar)
-          end
-        end
-
-        sgz.flush
-        sgz.close
-        sgz = nil
-
-        data.rewind
         sock.send data.string, 0
         sock.flush
 
@@ -69,7 +43,6 @@ module RNCP
       ensure
         sock.close if sock.nil? == false
         puts "[#] finished"
-        sgz.close if sgz.nil? == false
       end
     end # send_to
 
@@ -118,23 +91,8 @@ module RNCP
         dsock.close if dsock.nil? == false
         dsock = nil
 
-        data = StringIO.new("")
-        sgz = Zlib::GzipWriter.new(data)
-        tar = Archive::Tar::Minitar::Output.new sgz
+        data = tar files
 
-        puts "[#] pushing #{files} to #{addr.ip_address}:#{addr.ip_port}"
-        files.each do |f|
-          directory_list(f).each do |entry|
-            puts "[*] adding: #{entry}"
-            Archive::Tar::Minitar.pack_file(entry, tar)
-          end
-        end # files.each
-
-        sgz.flush
-        sgz.close
-        sgz = nil
-
-        data.rewind
         sock.send data.string, 0
         sock.flush
       rescue Exception => e
@@ -143,7 +101,6 @@ module RNCP
       ensure
         sock.close if sock.nil? == false
         puts "[*] finished"
-        sgz.close if sgz.nil? == false
         msock.close if msock.nil? == false
         dsock.close if dsock.nil? == false
       end # begin

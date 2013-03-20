@@ -12,15 +12,12 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 require 'rncp/networking'
-require 'stringio'
-require 'fileutils'
-require 'zlib'
-require 'archive/tar/minitar'
-require 'tempfile'
+require 'rncp/files'
 
 module RNCP
   class NcpListener
     include RNCP::Networking
+    include RNCP::Files
 
     def initialize
     end
@@ -39,14 +36,7 @@ module RNCP
         data += sock.gets()
       end
 
-      sgz = Zlib::GzipReader.new(StringIO.new(data))
-      tar = Archive::Tar::Minitar::Input.new sgz
-
-      tar.each do |entry|
-        puts "[*] #{entry.name}"
-        tar.extract_entry "./", entry
-      end
-
+      untar data
       puts "[*] received: "
 
       puts "[#] finished"
@@ -83,14 +73,7 @@ module RNCP
         data += sock.gets()
       end
 
-      sgz = Zlib::GzipReader.new(StringIO.new(data))
-      tar = Archive::Tar::Minitar::Input.new sgz
-
-      tar.each do |entry|
-        puts "[*] #{entry.name}"
-        tar.extract_entry "./", entry
-      end
-
+      untar data
       puts "[*] received: "
 
       puts "[#] finished"
