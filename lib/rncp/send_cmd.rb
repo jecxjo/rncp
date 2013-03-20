@@ -11,25 +11,20 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
-require 'rncp/version'
-
-require 'clamp'
-
-require 'rncp/listen_cmd'
-require 'rncp/send_cmd'
+require 'rncp/pusher'
 
 module RNCP
-  def self.version_string
-    "RNCP version #{RNCP::VERSION}"
-  end
-
   module Cli
-    class CommandLineRunner < Clamp::Command
-      self.default_subcommand = "listen"
+    class SendCommand < Clamp::Command
 
-      subcommand 'listen', "runs in listener mode, waits for connection", ListenCommand
-      subcommand 'send', "sends files to a listener mode receiver", SendCommand
-    end
+      parameter "IP", "Destination IP Address"
+      parameter "FILE ...", "Files to send"
+
+      def execute
+        RNCP::NcpPusher.new.send_to ip, file_list
+      end
+
+    end # ListenCommand
   end # Cli
-end
+end # RNCP
 
