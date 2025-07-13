@@ -1,6 +1,8 @@
 rncp / Ruby Network Copy
 ====
 
+**NOTE** LEAVING GITHUB!!! This project now live at https://git.sh0.xyz/rncp.git/
+
 This project is a port of Pyncp which is a port of the original 
 "ncp - a fast file copy tool for LANs" originally written by Felix von
 Leitner <felix-ncp@fefe.de>
